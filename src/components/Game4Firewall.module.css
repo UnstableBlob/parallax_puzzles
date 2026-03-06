@@ -1,0 +1,255 @@
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #050505;
+    color: #0f0;
+    font-family: monospace;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid #222;
+    box-shadow: 0 0 40px rgba(0, 255, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    position: relative;
+    overflow: hidden;
+}
+
+.shakeRed {
+    animation: shake 0.4s ease-in-out;
+    box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.5);
+    border-color: #f00;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-15px);
+    }
+
+    40% {
+        transform: translateX(15px);
+    }
+
+    60% {
+        transform: translateX(-15px);
+    }
+
+    80% {
+        transform: translateX(15px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.hudWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex: 1;
+    text-align: center;
+}
+
+.title {
+    color: #0f0;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: 4px;
+}
+
+.failedTitle {
+    color: #f00;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+.successTitle {
+    color: #0ff;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.brief {
+    color: #888;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.initBtn,
+.proceedBtn {
+    background: transparent;
+    border: 2px solid #0f0;
+    color: #0f0;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.initBtn:hover,
+.proceedBtn:hover {
+    background: rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+}
+
+.proceedBtn {
+    border-color: #0ff;
+    color: #0ff;
+}
+
+.proceedBtn:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+/* Gameplay HUDs */
+.topHud,
+.bottomHud {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    border-bottom: 1px dashed #333;
+}
+
+.bottomHud {
+    border-bottom: none;
+    border-top: 1px dashed #333;
+    margin-top: auto;
+}
+
+.hudText {
+    color: #555;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.timer {
+    font-size: 1.5rem;
+    color: #0f0;
+    font-weight: bold;
+}
+
+.timerAlert {
+    color: #f00;
+    animation: flash 1s infinite alternate;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.radarLayout {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2rem;
+}
+
+.sensorGrid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    height: 250px;
+    border: 2px solid #222;
+    border-radius: 50%;
+    background: radial-gradient(circle, #0a110a 0%, #000 70%);
+    box-shadow: inset 0 0 50px rgba(0, 255, 0, 0.05);
+}
+
+.centerPos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    border: 2px solid #0f0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+}
+
+.posLabel {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0.2rem;
+}
+
+.posValue {
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.criticalErrorBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    height: 250px;
+    background: #200;
+    border: 2px solid #f00;
+    color: #f00;
+    text-align: center;
+    box-shadow: 0 0 30px #f00;
+}
+
+/* D-Pad */
+.dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    grid-template-rows: repeat(3, 60px);
+    gap: 8px;
+}
+
+.emptyKey {
+    background: transparent;
+}
+
+.keyBtnCenter {
+    background: #111;
+    border-radius: 8px;
+}
+
+.keyBtn {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #aaa;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.keyBtn:active {
+    background: #0f0;
+    color: #000;
+    transform: scale(0.95);
+    border-color: #0f0;
+}
