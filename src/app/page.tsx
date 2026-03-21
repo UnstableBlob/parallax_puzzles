@@ -6,9 +6,14 @@ import Game1PowerGrid from "../components/Game1PowerGrid";
 import Game2Handshake from "../components/Game2Handshake";
 import Game3DatabaseSchema from "../components/Game3DatabaseSchema";
 import Game4Firewall from "../components/Game4Firewall";
-import Game5Decryption from "../components/Game5Decryption";
+import Game5OS from "../components/Game5OS";
+import Game6Networking from "../components/Game6Networking";
+import Game7DCG from "../components/Game7DCG";
+import Game8MRMAS from "../components/Game8MRMAS";
 
-const TOTAL_GAMES = 5;
+// All games are part of the main sequence
+const TOTAL_GAMES = 8;
+const ALL_GAMES = 8;
 
 export default function Home() {
     const [activeSet, setActiveSet] = useState<1 | 2 | 3 | null>(null);
@@ -29,9 +34,34 @@ export default function Home() {
         setIsCompleted(false);
     };
 
+    // Dev only: jump directly to any game
+    const devJumpTo = (gameNum: number) => {
+        setIsCompleted(false);
+        setCurrentGame(gameNum);
+        if (!activeSet) setActiveSet(1);
+    };
+
     return (
         <main className={styles.mainContainer}>
             <div className={styles.gameWrapper}>
+
+                {/* DEV ONLY: Game jump bar */}
+                {process.env.NODE_ENV === 'development' && (
+                    <div className={styles.devJumpBar}>
+                        <span className={styles.devJumpLabel}>DEV JUMP:</span>
+                        {Array.from({ length: ALL_GAMES }, (_, i) => i + 1).map(n => (
+                            <button
+                                key={n}
+                                className={`${styles.devJumpBtn} ${currentGame === n && activeSet ? styles.devJumpBtnActive : ''}`}
+                                onClick={() => devJumpTo(n)}
+                                title={`Jump to Game ${n}${n > TOTAL_GAMES ? ' (WIP)' : ''}`}
+                            >
+                                G{n}{n > TOTAL_GAMES ? ' 🚧' : ''}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 <header className={styles.header}>
                     <h1 className={styles.title}>Paraallax Quest</h1>
                     {activeSet && (
@@ -82,7 +112,16 @@ export default function Home() {
                                 <Game4Firewall activeSet={activeSet} onComplete={nextGame} />
                             )}
                             {currentGame === 5 && (
-                                <Game5Decryption activeSet={activeSet} onComplete={nextGame} />
+                                <Game5OS activeSet={activeSet} onComplete={nextGame} />
+                            )}
+                            {currentGame === 6 && (
+                                <Game6Networking activeSet={activeSet} onComplete={nextGame} />
+                            )}
+                            {currentGame === 7 && (
+                                <Game7DCG activeSet={activeSet} onComplete={nextGame} />
+                            )}
+                            {currentGame === 8 && (
+                                <Game8MRMAS activeSet={activeSet} onComplete={nextGame} />
                             )}
                         </div>
                     ) : (

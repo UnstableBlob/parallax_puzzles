@@ -34,31 +34,12 @@ const generateCodeForSet = (activeSet: number): HexCodeDef => {
             // S: Hex string contains 'C' or 'D'
             if (hexVal % 7 === 0) actionA = true;
             if (codeStr.includes('C') || codeStr.includes('D')) actionS = true;
-        } else if (activeSet === 2) {
-            // Set 2 (Beta):
-            // A: Sum of hex digits (pure numerical values) > 15
-            // S: Hex string is a palindrome
+        } else {
+            // Set 2 (Beta) — Also used as default for Set 3
             const d1 = parseInt(codeStr[2], 16);
             const d2 = parseInt(codeStr[3], 16);
             if (d1 + d2 > 15) actionA = true;
             if (codeStr[2] === codeStr[3]) actionS = true;
-        } else if (activeSet === 3) {
-            // Set 3 (Gamma):
-            // A: Bitwise AND of the two hex digits is non-zero
-            // S: Hex value converted to decimal is a Prime Number
-            const d1 = parseInt(codeStr[2], 16);
-            const d2 = parseInt(codeStr[3], 16);
-
-            const isPrime = (num: number) => {
-                if (num < 2) return false;
-                for (let i = 2, s = Math.sqrt(num); i <= s; i++) {
-                    if (num % i === 0) return false;
-                }
-                return true;
-            };
-
-            if ((d1 & d2) !== 0) actionA = true;
-            if (isPrime(hexVal)) actionS = true;
         }
     } while (actionA && actionS);
 
@@ -77,7 +58,7 @@ interface LogEntry {
 }
 
 const TARGET_SCORE = 10;
-const CYCLE_TIME_MS = 1200; // Sped up for difficulty
+const CYCLE_TIME_MS = 2500;
 
 export default function Game2Handshake({ activeSet, onComplete }: Game2HandshakeProps) {
     const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -116,26 +97,12 @@ export default function Game2Handshake({ activeSet, onComplete }: Game2Handshake
     const spawnNewCode = useCallback(() => {
         if (!isGameActiveRef.current) return;
 
-        // Check if previous was ignored correctly
         const currentLogs = logsRef.current;
         if (currentLogs.length > 0) {
             const lastLog = currentLogs[currentLogs.length - 1];
             if (lastLog.status === 'pending') {
-                if (lastLog.codeDef.correctAction === 'IGNORE') {
-                    // Successfully ignored
-                    const newProgress = progressRef.current + 1;
-                    setProgress(newProgress);
-                    triggerFlash('success');
-                    setLogs(prev => prev.map(l => l.id === lastLog.id ? { ...l, status: 'correct' } : l));
-                    if (newProgress >= TARGET_SCORE) {
-                        setIsGameActive(false);
-                        setIsComplete(true);
-                        return; // Stop spawning
-                    }
-                } else {
-                    // Failed to act when action was required
-                    handleFailure();
-                }
+                // User did not act in time — always a failure, even for IGNORE codes
+                handleFailure();
             }
         }
 
@@ -211,13 +178,14 @@ export default function Game2Handshake({ activeSet, onComplete }: Game2Handshake
             const key = e.key.toLowerCase();
             if (key === 'a') handleAction('A');
             if (key === 's') handleAction('S');
+            if (key === 'i') handleAction('IGNORE');
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isGameActive, handleAction]);
 
-    const protocolNames: Record<number, string> = { 1: 'ALPHA', 2: 'BETA', 3: 'GAMMA' };
+    const protocolNames: Record<number, string> = { 1: 'ALPHA', 2: 'BETA', 3: 'BETA' };
 
     return (
         <div className={`${styles.container} ${flashState === 'error' ? styles.shakeError : ''}`}>
@@ -247,7 +215,7 @@ export default function Game2Handshake({ activeSet, onComplete }: Game2Handshake
                             <ul className={styles.rulesList}>
                                 <li><strong>ACTION A</strong> [Key A]</li>
                                 <li><strong>ACTION S</strong> [Key S]</li>
-                                <li><strong>IGNORE</strong> (Wait {CYCLE_TIME_MS / 1000}s)</li>
+                                <li><strong>IGNORE</strong> — Press Ignore button [Key I]</li>
                             </ul>
                             <p className={styles.hint}>Consult Guide Manual for Protocol {protocolNames[activeSet]} logic.</p>
                             <button className={styles.startBtn} onClick={startGame}>INITIATE HANDSHAKE</button>
@@ -304,10 +272,14 @@ export default function Game2Handshake({ activeSet, onComplete }: Game2Handshake
                     <span className={styles.btnLabel}>ACTION S</span>
                     <span className={styles.btnShortcut}>[ S ]</span>
                 </button>
-                <div className={styles.ignoreIndicator}>
-                    <div className={styles.ignoreLabel}>IGNORE</div>
-                    <div className={styles.ignoreDesc}>(Do nothing)</div>
-                </div>
+                <button
+                    className={`${styles.arcadeBtn} ${styles.ignoreBtn}`}
+                    onClick={() => handleAction('IGNORE')}
+                    disabled={!isGameActive}
+                >
+                    <span className={styles.btnLabel}>IGNORE</span>
+                    <span className={styles.btnShortcut}>[ I ]</span>
+                </button>
             </div>
 
         </div>

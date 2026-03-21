@@ -1,238 +1,344 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import styles from './Game4Firewall.module.css';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import styles from "./Game4Firewall.module.css";
 
 interface Game4FirewallProps {
-    activeSet: number;
-    onComplete: () => void;
+  activeSet: number;
+  onComplete: () => void;
 }
 
-interface MazeDef {
-    start: [number, number];
-    target: [number, number];
-    validPaths: string[];
+type GameStatus = "idle" | "playing" | "hit" | "failed" | "success";
+type MoveKey = "UP" | "DOWN" | "LEFT" | "RIGHT";
+
+interface SetDef {
+  label: string;
+  start: [number, number];
+  target: [number, number];
 }
 
-const MAZES: Record<number, MazeDef> = {
-    1: {
-        start: [0, 0],
-        target: [6, 6],
-        validPaths: ["0,0", "0,1", "0,2", "1,2", "2,2", "2,3", "2,4", "3,4", "4,4", "5,4", "6,4", "6,5", "6,6"]
-    },
-    2: {
-        start: [6, 0],
-        target: [0, 6],
-        validPaths: ["6,0", "5,0", "4,0", "4,1", "4,2", "5,2", "6,2", "6,3", "6,4", "5,4", "4,4", "3,4", "2,4", "2,5", "2,6", "1,6", "0,6"]
-    },
-    3: {
-        start: [3, 0],
-        target: [3, 6],
-        validPaths: ["3,0", "3,1", "2,1", "1,1", "1,2", "1,3", "2,3", "3,3", "4,3", "5,3", "5,4", "5,5", "4,5", "3,5", "3,6"]
-    }
+const GRID_SIZE = 7;
+const START_TIME = 120;
+const THROTTLE_MS = 150;
+const COLLISION_PENALTY = 15;
+const COLLISION_RESET_DELAY = 800;
+
+const SETS: Record<number, SetDef> = {
+  1: {
+    label: "SECTOR ALPHA",
+    start: [2, 2],
+    target: [5, 0],
+  },
+  2: {
+    label: "SECTOR BETA",
+    start: [3, 4],
+    target: [0, 6],
+  },
+  3: {
+    label: "SECTOR GAMMA",
+    start: [4, 3],
+    target: [6, 0],
+  },
 };
 
-const START_TIME = 120; // 2 minutes
-const THROTTLE_MS = 150;
+const MOVE_VECTORS: Record<MoveKey, { dx: number; dy: number }> = {
+  UP: { dx: 0, dy: 1 },
+  DOWN: { dx: 0, dy: -1 },
+  LEFT: { dx: -1, dy: 0 },
+  RIGHT: { dx: 1, dy: 0 },
+};
 
-export default function Game4Firewall({ activeSet, onComplete }: Game4FirewallProps) {
-    const maze = MAZES[activeSet] || MAZES[1];
+function getCorrectMove(x: number, y: number): MoveKey {
+  const sum = x + y;
 
-    const [pos, setPos] = useState({ x: maze.start[0], y: maze.start[1] });
-    const [timeLeft, setTimeLeft] = useState(START_TIME);
-    const [status, setStatus] = useState<'idle' | 'playing' | 'hit' | 'failed' | 'success'>('idle');
+  if (sum % 2 === 0) {
+    return x < y ? "UP" : "RIGHT";
+  }
 
-    // Status ref to access in keyboard listeners without stale closures
-    const statusRef = useRef(status);
-    const posRef = useRef(pos);
-    const lastMoveTimeRef = useRef(0);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+  return x < y ? "LEFT" : "DOWN";
+}
 
-    useEffect(() => { statusRef.current = status; }, [status]);
-    useEffect(() => { posRef.current = pos; }, [pos]);
+function isWithinGrid(x: number, y: number): boolean {
+  return x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE;
+}
 
-    // Reset pos on activeSet change or replay
-    useEffect(() => {
-        setPos({ x: maze.start[0], y: maze.start[1] });
-    }, [maze]);
+export default function Game4Firewall({
+  activeSet,
+  onComplete,
+}: Game4FirewallProps) {
+  const currentSet = SETS[activeSet] || SETS[1];
 
-    const startGame = () => {
-        setPos({ x: maze.start[0], y: maze.start[1] });
-        setTimeLeft(START_TIME);
-        setStatus('playing');
+  const [pos, setPos] = useState({
+    x: currentSet.start[0],
+    y: currentSet.start[1],
+  });
+  const [timeLeft, setTimeLeft] = useState(START_TIME);
+  const [status, setStatus] = useState<GameStatus>("idle");
+  const [lastMoveLabel, setLastMoveLabel] = useState<MoveKey | null>(null);
+
+  const statusRef = useRef(status);
+  const posRef = useRef(pos);
+  const lastMoveTimeRef = useRef(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    statusRef.current = status;
+  }, [status]);
+
+  useEffect(() => {
+    posRef.current = pos;
+  }, [pos]);
+
+  useEffect(() => {
+    setPos({ x: currentSet.start[0], y: currentSet.start[1] });
+    setTimeLeft(START_TIME);
+    setStatus("idle");
+    setLastMoveLabel(null);
+  }, [currentSet]);
+
+  const startGame = () => {
+    setPos({ x: currentSet.start[0], y: currentSet.start[1] });
+    setTimeLeft(START_TIME);
+    setStatus("playing");
+    setLastMoveLabel(null);
+  };
+
+  const triggerCollision = useCallback(() => {
+    setStatus("hit");
+    setTimeLeft((prev) => Math.max(0, prev - COLLISION_PENALTY));
+
+    setTimeout(() => {
+      if (statusRef.current === "hit") {
+        setPos({ x: currentSet.start[0], y: currentSet.start[1] });
+        setLastMoveLabel(null);
+        setStatus("playing");
+      }
+    }, COLLISION_RESET_DELAY);
+  }, [currentSet]);
+
+  const handleMove = useCallback(
+    (attemptedMove: MoveKey) => {
+      if (statusRef.current !== "playing") return;
+
+      const now = Date.now();
+      if (now - lastMoveTimeRef.current < THROTTLE_MS) return;
+      lastMoveTimeRef.current = now;
+
+      const { x, y } = posRef.current;
+      const correctMove = getCorrectMove(x, y);
+      const vector = MOVE_VECTORS[attemptedMove];
+      const nextX = x + vector.dx;
+      const nextY = y + vector.dy;
+
+      setLastMoveLabel(attemptedMove);
+
+      if (attemptedMove !== correctMove || !isWithinGrid(nextX, nextY)) {
+        triggerCollision();
+        return;
+      }
+
+      setPos({ x: nextX, y: nextY });
+
+      if (nextX === currentSet.target[0] && nextY === currentSet.target[1]) {
+        setStatus("success");
+        if (timerRef.current) clearInterval(timerRef.current);
+      }
+    },
+    [currentSet, triggerCollision]
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (statusRef.current !== "playing") return;
+
+      switch (e.key) {
+        case "ArrowUp":
+        case "w":
+        case "W":
+          e.preventDefault();
+          handleMove("UP");
+          break;
+        case "ArrowDown":
+        case "s":
+        case "S":
+          e.preventDefault();
+          handleMove("DOWN");
+          break;
+        case "ArrowLeft":
+        case "a":
+        case "A":
+          e.preventDefault();
+          handleMove("LEFT");
+          break;
+        case "ArrowRight":
+        case "d":
+        case "D":
+          e.preventDefault();
+          handleMove("RIGHT");
+          break;
+      }
     };
 
-    const triggerCollision = useCallback(() => {
-        setStatus('hit');
-        setTimeLeft(prev => Math.max(0, prev - 15)); // Strict penalty
-        setTimeout(() => {
-            if (statusRef.current === 'hit') {
-                setPos({ x: maze.start[0], y: maze.start[1] }); // Hard Reset
-                setStatus('playing');
-            }
-        }, 800);
-    }, [maze]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleMove]);
 
-    const handleMove = useCallback((dx: number, dy: number) => {
-        if (statusRef.current !== 'playing') return;
+  useEffect(() => {
+    if (status === "playing") {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            setStatus("failed");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
 
-        const now = Date.now();
-        if (now - lastMoveTimeRef.current < THROTTLE_MS) return;
-        lastMoveTimeRef.current = now;
-
-        const { x, y } = posRef.current;
-        const newX = x + dx;
-        const newY = y + dy;
-
-        const newPosStr = `${newX},${newY}`;
-
-        if (!maze.validPaths.includes(newPosStr)) {
-            triggerCollision();
-            return;
-        }
-
-        setPos({ x: newX, y: newY });
-
-        if (newX === maze.target[0] && newY === maze.target[1]) {
-            setStatus('success');
-            if (timerRef.current) clearInterval(timerRef.current);
-        }
-    }, [triggerCollision, maze]);
-
-    // Keyboard listener
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (statusRef.current !== 'playing') return;
-            switch (e.key) {
-                case 'ArrowUp': e.preventDefault(); handleMove(0, 1); break;
-                case 'ArrowDown': e.preventDefault(); handleMove(0, -1); break;
-                case 'ArrowLeft': e.preventDefault(); handleMove(-1, 0); break;
-                case 'ArrowRight': e.preventDefault(); handleMove(1, 0); break;
-                case 'w': case 'W': e.preventDefault(); handleMove(0, 1); break;
-                case 's': case 'S': e.preventDefault(); handleMove(0, -1); break;
-                case 'a': case 'A': e.preventDefault(); handleMove(-1, 0); break;
-                case 'd': case 'D': e.preventDefault(); handleMove(1, 0); break;
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [handleMove]);
-
-    // Timer
-    useEffect(() => {
-        if (status === 'playing') {
-            timerRef.current = setInterval(() => {
-                setTimeLeft(prev => {
-                    if (prev <= 1) {
-                        setStatus('failed');
-                        return 0;
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-        } else if (timerRef.current) {
-            clearInterval(timerRef.current);
-        }
-
-        return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
-        };
-    }, [status]);
-
-
-    const formatTime = (time: number) => {
-        const m = Math.floor(time / 60).toString().padStart(2, '0');
-        const s = (time % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
     };
+  }, [status]);
 
-    if (status === 'idle') {
-        return (
-            <div className={styles.container}>
-                <div className={styles.hudWrapper}>
-                    <h2 className={styles.title}>THE FIREWALL</h2>
-                    <p className={styles.brief}>
-                        Navigate the grid completely blind. Any deviation from the safe path will sever the connection.<br />
-                        No proximity sensors available.<br />
-                        Grid constraints: Maze Module {activeSet}. Target Coordinates: {maze.target[0]}, {maze.target[1]}. Time Limit: 2:00.
-                    </p>
-                    <button className={styles.initBtn} onClick={startGame}>BREACH FIREWALL</button>
-                </div>
-            </div>
-        );
-    }
+  const formatTime = (time: number) => {
+    const m = Math.floor(time / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (time % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
 
-    if (status === 'failed') {
-        return (
-            <div className={styles.container}>
-                <div className={styles.hudWrapper}>
-                    <h2 className={styles.failedTitle}>CONNECTION TERMINATED</h2>
-                    <p className={styles.brief}>You have been traced. Trace route completed.</p>
-                    <button className={styles.initBtn} onClick={startGame}>RETRY BREACH</button>
-                </div>
-            </div>
-        );
-    }
-
-    if (status === 'success') {
-        return (
-            <div className={styles.container}>
-                <div className={styles.hudWrapper}>
-                    <h2 className={styles.successTitle}>FIREWALL BYPASSED</h2>
-                    <p className={styles.brief}>Target reached. Mainframe access secured.</p>
-                    <button className={styles.proceedBtn} onClick={onComplete}>[ PROCEED TO SECTOR 5 ]</button>
-                </div>
-            </div>
-        );
-    }
-
+  if (status === "idle") {
     return (
-        <div className={`${styles.container} ${status === 'hit' ? styles.shakeRed : ''}`}>
-
-            <div className={styles.topHud}>
-                <div className={styles.hudText}>UPLINK ESTABLISHED | MAZE {activeSet}</div>
-                <div className={`${styles.timer} ${timeLeft <= 30 ? styles.timerAlert : ''}`}>
-                    TIME: {formatTime(timeLeft)}
-                </div>
-            </div>
-
-            <div className={styles.radarLayout}>
-                {status === 'hit' ? (
-                    <div className={styles.criticalErrorBox}>
-                        <h1>FATAL COLLISION</h1>
-                        <p>RESETTING CONNECTION...</p>
-                    </div>
-                ) : (
-                    <div className={styles.sensorGrid}>
-                        <div className={styles.centerPos}>
-                            <div className={styles.posLabel}>POS</div>
-                            <div className={styles.posValue}>X:{pos.x} Y:{pos.y}</div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Visual D-Pad for mouse users */}
-                <div className={styles.dpad}>
-                    <div className={styles.emptyKey} />
-                    <button className={styles.keyBtn} onClick={() => handleMove(0, 1)}>▲</button>
-                    <div className={styles.emptyKey} />
-
-                    <button className={styles.keyBtn} onClick={() => handleMove(-1, 0)}>◀</button>
-                    <div className={styles.keyBtnCenter}></div>
-                    <button className={styles.keyBtn} onClick={() => handleMove(1, 0)}>▶</button>
-
-                    <div className={styles.emptyKey} />
-                    <button className={styles.keyBtn} onClick={() => handleMove(0, -1)}>▼</button>
-                    <div className={styles.emptyKey} />
-                </div>
-            </div>
-
-            <div className={styles.bottomHud}>
-                <div className={styles.hudText}>SENSOR ARRAY OFFLINE</div>
-                <div className={styles.hudText}>GRID: 7x7</div>
-            </div>
-
+      <div className={styles.container}>
+        <div className={styles.hudWrapper}>
+          <div className={styles.setBadge}>{currentSet.label}</div>
+          <h2 className={styles.title}>THE FIREWALL</h2>
+          <p className={styles.brief}>
+            Movement is validated by protocol logic only.
+            <br />
+            The operator may move in four directions, but only one move is valid
+            at any position.
+            <br />
+            Start: {currentSet.start[0]}, {currentSet.start[1]} | Target:{" "}
+            {currentSet.target[0]}, {currentSet.target[1]} | Grid: {GRID_SIZE}x
+            {GRID_SIZE} | Time Limit: 2:00
+          </p>
+          <button className={styles.initBtn} onClick={startGame}>
+            BREACH FIREWALL
+          </button>
         </div>
+      </div>
     );
+  }
+
+  if (status === "failed") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.hudWrapper}>
+          <div className={styles.setBadge}>{currentSet.label}</div>
+          <h2 className={styles.failedTitle}>CONNECTION TERMINATED</h2>
+          <p className={styles.brief}>
+            Time expired. The firewall has locked the route.
+          </p>
+          <button className={styles.initBtn} onClick={startGame}>
+            RETRY BREACH
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "success") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.hudWrapper}>
+          <div className={styles.setBadge}>{currentSet.label}</div>
+          <h2 className={styles.successTitle}>FIREWALL BYPASSED</h2>
+          <p className={styles.brief}>
+            Target reached. Decision protocol executed successfully.
+          </p>
+          <button className={styles.proceedBtn} onClick={onComplete}>
+            [ PROCEED TO NEXT SECTOR ]
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`${styles.container} ${status === "hit" ? styles.shakeRed : ""}`}>
+      <div className={styles.topHud}>
+        <div className={styles.hudText}>
+          UPLINK ESTABLISHED | {currentSet.label}
+        </div>
+        <div className={`${styles.timer} ${timeLeft <= 30 ? styles.timerAlert : ""}`}>
+          TIME: {formatTime(timeLeft)}
+        </div>
+      </div>
+
+      <div className={styles.radarLayout}>
+        {status === "hit" ? (
+          <div className={styles.criticalErrorBox}>
+            <h1>INVALID MOVE</h1>
+            <p>PROTOCOL BREACH DETECTED</p>
+            <span>-{COLLISION_PENALTY}s PENALTY</span>
+          </div>
+        ) : (
+          <div className={styles.sensorGrid}>
+            <div className={styles.centerPos}>
+              <div className={styles.posLabel}>POS</div>
+              <div className={styles.posValue}>
+                X:{pos.x} Y:{pos.y}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className={styles.sidePanel}>
+          <div className={styles.infoCard}>
+            <div className={styles.infoLabel}>TARGET</div>
+            <div className={styles.infoValue}>
+              X:{currentSet.target[0]} Y:{currentSet.target[1]}
+            </div>
+          </div>
+
+          <div className={styles.infoCard}>
+            <div className={styles.infoLabel}>LAST INPUT</div>
+            <div className={styles.infoValue}>{lastMoveLabel ?? "--"}</div>
+          </div>
+        </div>
+
+        <div className={styles.dpad}>
+          <div className={styles.emptyKey} />
+          <button className={styles.keyBtn} onClick={() => handleMove("UP")}>
+            ▲
+          </button>
+          <div className={styles.emptyKey} />
+
+          <button className={styles.keyBtn} onClick={() => handleMove("LEFT")}>
+            ◀
+          </button>
+          <div className={styles.keyBtnCenter}></div>
+          <button className={styles.keyBtn} onClick={() => handleMove("RIGHT")}>
+            ▶
+          </button>
+
+          <div className={styles.emptyKey} />
+          <button className={styles.keyBtn} onClick={() => handleMove("DOWN")}>
+            ▼
+          </button>
+          <div className={styles.emptyKey} />
+        </div>
+      </div>
+
+      <div className={styles.bottomHud}>
+        <div className={styles.hudText}>RULE ENGINE ACTIVE</div>
+        <div className={styles.hudText}>GRID: {GRID_SIZE}x{GRID_SIZE}</div>
+      </div>
+    </div>
+  );
 }
