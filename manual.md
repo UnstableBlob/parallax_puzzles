@@ -220,28 +220,35 @@ Determine which quadrant of the radar the drone is in. Apply the Offset Value fr
 ---
 
 
-## Sector 9: The Alchemist's Crucible
-Proprietary material synthesis via a 3x3 grid.
+## Sector 9: ANOMALOUS CRAFTING PROTOCOL
+Localized dimensional shifting has corrupted standard crafting physics. Do NOT rely on traditional shapes.
 
-**The Operator must tell you:** What raw materials they have and what the environment contains (Magma/Cryo-fluid).
+**The Operator must tell you:** What raw materials they have and what the environment contains.
+**Your Job:** Guide them through the altered coordinate grid to forge tools, extract Lava, and create Obsidian and break it.
 
-**Your Job:** Guide them through the logic chain to create **Obsidian** and break it.
+**1. TOOL FORGING BLUEPRINTS (3x3 Coordinate Grid):**
+*Cols are A, B, C. Rows are 1, 2, 3. Forged at Room Temp (20°C).*
 
-**THE SYNTHESIZER BLUEPRINT:**
+*   **Stone Pickaxe:**
+    *   **Cobblestone:** A1, C1, B2 (V-Shape)
+    *   **Stick:** A2, C2
+*   **Bucket:** 
+    *   **Iron Ingot:** A1, B2, C3 (Diagonal Line)
+*   **Iron Pickaxe:**
+    *   **Iron Ingot:** A3, B3, C3 (Bottom Row)
+    *   **Stick:** B2, B1 (Center Column)
+*   **Diamond Pickaxe:**
+    *   **Diamond:** A1, A2, A3 (Left Column)
+    *   **Stick:** B3, C3 (Bottom Right)
 
-**1. Tool Recipes (3x3 Grid):**
-- **Silicate Tool (Stone Pick):** 3 Silicate and 2 Carbon Rods in a **V-shape** (Slots 0, 2, 4, 7, 8 approx). *Forged at Room Temp (20°C).*
-- **Ferrous Tool (Iron Pick):** 3 Purified Ferrous and 2 Carbon Rods in an **Upside-down T** (Slots 1, 4, 6, 7, 8). *Forged at Room Temp (20°C).*
-- **Crystalline Tool (Diamond Pick):** 3 Usable Crystalline and 2 Carbon Rods in an **L-shape** (Slots 0, 3, 6, 7, 8). *Forged at Room Temp (20°C).*
+**2. REFINEMENT PROTOCOLS:**
+*   **Smelting Iron:** Place **Iron Ore** in the exact center of the grid (B2). Heat the Crucible to exactly **1500°C** to smelt an Iron Ingot.
+*   **Extracting Diamond:** The Operator must "use" their crafted **Iron Pickaxe** on the Raw Diamond Ore in their bag to break it into usable Diamonds.
 
-**2. Refinement:**
-- **Purified Ferrous:** Place Raw Ferrous in Slot 4. Heat to **1200°C**.
-- **Usable Crystalline:** The Operator must "use" the **Ferrous Tool** on raw Crystalline in their inventory.
-- **Thermal Receptacle (Bucket):** 3 Purified Ferrous in a **Diagonal Line** (Slots 0, 4, 8).
-
-**3. Thermodynamics (The Trap):**
-- **To create Dense Obsidian:** Magma must be added to Cryo-Fluid. (Fill Receptacle with Magma first, then pour into Cryo-Fluid).
-- *Warning: Adding Cryo-Fluid to Magma results in Pumice (Useless).*
+**3. THERMODYNAMICS (CRITICAL WARNING):**
+Standard cooling physics are reversed.
+*   *WARNING:* Pouring a Water Bucket onto Lava creates useless Cobblestone.
+*   **SOLUTION:** The Operator must fill their bucket with Lava, and pour the **Lava Bucket directly into the Water Source** to synthesize Dense Obsidian.
 
 ---
 

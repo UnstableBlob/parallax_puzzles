@@ -10,7 +10,7 @@ import Game5Decryption from "../components/Game5Decryption";
 import Game6HarmonicSynthesizer from "../components/Game6HarmonicSynthesizer";
 import Game7EncryptedDials from "../components/Game7EncryptedDials";
 import Game8DroneCalibration from "../components/Game8DroneCalibration";
-import Game9AlchemistCrucible from "../components/Game9AlchemistCrucible";
+import Game9MinecraftCrucible from "../components/Game9MinecraftCrucible";
 import Game10SnoringSabotage from "../components/Game10SnoringSabotage";
 
 const TOTAL_GAMES = 10;
@@ -23,7 +23,7 @@ const GAME_TITLES = [
     "Harmonic Synth",
     "Encrypted Dials",
     "Drone Calibration",
-    "Alchemist Crucible",
+    "Crafting Protocol",
     "Snoring Sabotage"
 ];
 
@@ -111,7 +111,7 @@ export default function Home() {
                                 <Game8DroneCalibration activeSet={activeSet} onComplete={nextGame} />
                             )}
                             {currentGame === 9 && (
-                                <Game9AlchemistCrucible activeSet={activeSet} onComplete={nextGame} />
+                                <Game9MinecraftCrucible activeSet={activeSet} onComplete={nextGame} />
                             )}
                             {currentGame === 10 && (
                                 <Game10SnoringSabotage activeSet={activeSet} onComplete={nextGame} />

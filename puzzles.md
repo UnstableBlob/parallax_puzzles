@@ -71,50 +71,27 @@ The Broken Drone Calibration
         Operator inputs the numbers, holds the button, and the drone stabilizes.
 
 9.
-"The Alchemist's Crucible"
+"Anomalous Crafting Protocol" (Minecraft Logic Scrambled)
 
-We keep your exact logic chain (Stone -> Iron -> Bucket -> Diamond -> Obsidian), but we change the names, the crafting shapes, and add a "catalyst" condition so the Operator must rely on the Guide.
-1. The Setup
+Localized dimensional shifting has corrupted standard crafting physics. This puzzle turns the Operator's Minecraft muscle memory against them. They will want to build tools using traditional shapes, but the Guide’s manual has completely different coordinate-based blueprints.
 
-    Operator's Screen: * The Environment: A 3x1 grid. Cell A contains Liquid Magma (Lava). Cell C contains Cryo-Fluid (Water). Cell B is empty.
+    The Vibe: Sector 9 is a high-temperature crucible where dimensional stability is failing. Minecraft-style items (Cobblestone, Sticks, Iron, Diamonds) are used in "wrong" ways.
 
-        The Bag (Inventory): Contains raw materials: Carbon Rods (Wood/Sticks), Silicate (Stone), Raw Ferrous (Iron Ore), and Carbon Crystalline (Diamond).
+    Operator's Screen:
+    *   3x3 Coordinate Grid (A1 to C3).
+    *   Inventory Bag: Contains raw materials (Cobblestone, Sticks, Iron Ore, Diamond Ore).
+    *   Environment: Lava Source and Water Source slots.
+    *   Temperature Slider: Used for smelting.
 
-        The Crucible: A 3x3 crafting grid with a Temperature Dial next to it.
+    Guide's Manual: "Sector 9: Anomalous Crafting Protocol." This contains the scrambled coordinate blueprints and inverted thermodynamics rules.
 
-    Guide's Manual: "The Synthesizer Blueprint." This contains the new, altered recipes and the rules of thermodynamics.
-
-2. The Gameplay Flow (The Logic Chain)
-
-    The Stone Pickaxe: * Minecraft knowledge: T-shape.
-
-        Your Game: The Guide's manual says a Silicate Fracture Tool requires 3 Silicate and 2 Carbon Rods in a V-shape, forged at Room Temperature.
-
-    The Iron (Smelting): * Operator puts Raw Ferrous in the Crucible.
-
-        Guide's manual: "To purify Ferrous material, heat to 1200°C." Operator turns the dial, and it turns into Purified Ferrous (Iron Ingots).
-
-    The Bucket & The Iron Pickaxe:
-
-        Minecraft knowledge: Bucket is a V-shape, Pickaxe is a T-shape.
-
-        Your Game: Guide reads: "A Thermal Receptacle (Bucket) requires 3 Purified Ferrous in a diagonal line. A Ferrous Fracture Tool (Iron Pick) requires 3 Ferrous and 2 Rods in an upside-down T-shape."
-
-    Mining the Diamond:
-
-        Operator uses the new Iron Pick to break the Carbon Crystalline block in their bag to make it usable.
-
-        Guide reads: "A Crystalline Fracture Tool (Diamond Pick) requires 3 Crystalline and 2 Rods in an L-shape."
-
-    Creating Obsidian:
-
-        The Trap: In Minecraft, water onto a lava source makes Obsidian. Lava onto water makes Cobblestone.
-
-        Your Game (Flipping the script): The Guide's manual explicitly states: "WARNING: Adding Cryo-Fluid (Water) to Magma (Lava) results in useless Pumice. To create Dense Obsidian, Magma must be poured into the Cryo-Fluid."
-
-        Operator drags the Bucket to the Lava, then drags the Lava Bucket to the Water. It solidifies into Obsidian.
-
-    The Finish: Operator drags the Diamond Pickaxe to the Obsidian to clear the level.
+    The Gameplay Loop:
+    1.  Identify: The Operator lists their materials.
+    2.  Forge: The Guide provides coordinate-based shapes for tools (e.g., "Place Cobblestone in A1, B2, and C1 for a Stone Pickaxe").
+    3.  Smelt: The Operator puts Iron Ore in the center (B2) and heats the furnace to 1500°C as instructed by the Guide.
+    4.  Extract: The Operator uses the Iron Pickaxe on Diamond Ore in their bag to "shatter" it into Diamonds.
+    5.  The Trap (Thermodynamics): The Guide warns that water on lava makes useless Cobblestone. To get Obsidian, the Operator must fill a bucket with Lava and pour it into the Water Source.
+    6.  Finish: Break the resulting Obsidian with a Diamond Pickaxe.
 
 10.
 "The Snoring Sabotage" (The Rigger's Equation)
