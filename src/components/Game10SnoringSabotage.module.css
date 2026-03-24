@@ -1,0 +1,217 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    user-select: none;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.badge {
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.gameArea {
+    display: flex;
+    gap: 2rem;
+    background: rgba(10, 20, 30, 0.8);
+    border: 2px solid #234;
+    border-radius: 12px;
+    padding: 1.5rem;
+    justify-content: space-between;
+}
+
+.pulleyContainer {
+    flex: 2;
+    position: relative;
+    background: linear-gradient(to bottom, #112, #223);
+    border-radius: 8px;
+    border: 1px solid #345;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.svgPulley {
+    width: 100%;
+    height: 350px;
+}
+
+.rope {
+    stroke: #dca;
+    stroke-width: 3;
+    fill: none;
+}
+
+.ropeFrayed {
+    stroke: #e55;
+    stroke-width: 2;
+    stroke-dasharray: 4, 2;
+}
+
+.pulleyWheel {
+    fill: #555;
+    stroke: #333;
+    stroke-width: 2;
+}
+
+.pulleyWheelRusty {
+    fill: #a53;
+    stroke: #632;
+}
+
+.beam {
+    fill: #321;
+    stroke: #210;
+    stroke-width: 2;
+}
+
+.weightInfo {
+    font-family: monospace;
+    font-size: 0.9rem;
+    fill: #fff;
+    text-anchor: middle;
+}
+
+.controlsPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.controlsPanel h3 {
+    margin: 0;
+    color: #cbd5e1;
+    font-family: monospace;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 0.5rem;
+}
+
+.weightsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.weightBtn {
+    background: #334;
+    border: 1px solid #556;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: monospace;
+    transition: all 0.2s;
+}
+
+.weightBtn:hover {
+    background: #445;
+}
+
+.controlsPanel p {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.leverContainer {
+    margin-top: auto;
+    background: #422;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid #622;
+    text-align: center;
+}
+
+.leverBtn {
+    background: linear-gradient(to bottom, #e11, #900);
+    color: white;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #f88;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    box-shadow: 0 4px 0 #600;
+}
+
+.leverBtn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #600;
+}
+
+.leverBtn.locked {
+    background: #252;
+    border-color: #5a5;
+    box-shadow: 0 2px 0 #131;
+    transform: translateY(2px);
+}
+
+.statusSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
+}
+
+.statusMessage {
+    font-family: monospace;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.successMsg {
+    color: #4ade80;
+    border-color: #4ade80;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+    animation: pulse 2s infinite;
+}
+
+.errorMsg {
+    color: #ef4444;
+    border-color: #ef4444;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+}
+
+.completeBtn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    transition: all 0.2s;
+    align-self: center;
+}

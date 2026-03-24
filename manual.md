@@ -132,3 +132,137 @@ The Operator will see an english prompt asking for a specific codeword. They wil
 - **X** = ⍮ (Triangle with cross)
 - **Y** = ⍯ (Square bracket Y)
 - **Z** = ⍰ (Square bracket Z)
+
+---
+
+## Sector 6: ADVANCED HARMONIC SYNTHESIS
+The incoming signal requires precise manipulation of Amplitude and Phase across 6 frequency bands.
+
+**STEP 1: Identify the Signal Recipe**
+Ask the Operator for the **Signal ID**. This tells you the exact Frequencies, Amplitudes, and Target Phases required.
+
+| Signal ID | Component 1 | Component 2 | Component 3 |
+| :--- | :--- | :--- | :--- |
+| **ECHO-7** | Fund. (1x): Amp 5, Ph 0° | 2nd Harm (2x): Amp 3, Ph 180° | 4th Harm (4x): Amp 4, Ph 90° |
+| **NOVA-3** | 3rd Harm (3x): Amp 4, Ph 270° | 5th Harm (5x): Amp 2, Ph 90° | 6th Harm (6x): Amp 5, Ph 0° |
+| **PULSAR-9**| Fund. (1x): Amp 3, Ph 180° | 2nd Harm (2x): Amp 4, Ph 270° | 3rd Harm (3x): Amp 5, Ph 90° |
+
+**STEP 2: Hardware Routing**
+Ask the Operator for the **Routing Board** name. This tells you which Channel (A-F) controls which Frequency multiplier.
+
+| Routing Board | CH A | CH B | CH C | CH D | CH E | CH F |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **EPSILON** | 4x | 1x | 5x | 3x | 2x | 6x |
+| **OMEGA** | 1x | 6x | 3x | 2x | 5x | 4x |
+| **SIGMA** | 2x | 3x | 4x | 5x | 6x | 1x |
+
+**STEP 3: Calculate Phase Interference (CRITICAL)**
+The Routing Boards have hardware defects that *add* a permanent Phase Shift to certain channels. You must tell the Operator to subtract this interference from the Target Phase.
+
+* **EPSILON BOARD:** Adds **+180°** to channels on the Left Bank (**Channels A, B, C**).
+* **OMEGA BOARD:** Adds **+90°** to channels on the Right Bank (**Channels D, E, F**).
+* **SIGMA BOARD:** Adds **+270°** to **ALL Channels**.
+
+*(Example: If the Recipe needs Phase 90° on Channel A, but you are on EPSILON, the board adds 180°. The Operator must input 270° so the total wraps around to 90°).*
+
+---
+
+
+## Sector 7: Encrypted Dials
+A legacy radar jammer requires manual symbol alignment. The symbols are Greek/Runic characters.
+
+**The Operator must tell you:**
+1. The internal temperature gauge reading.
+2. The WAVE profile (Amplitude and Wavelength/Grid Units).
+
+**Your Job:** Tell them which symbol to set for Dials 1, 2, and 3.
+
+**DIAL CALIBRATION CHART:**
+
+| Signal | Target Wave | Temp | Dial 1 | Dial 2 | Dial 3 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **ALPHA** | Amp 4 / WL 8 | 75°C | Δ | α | Ω |
+| **BETA** | Amp 2 / WL 4 | 45°C | β | γ | Φ |
+| **GAMMA** | Amp 5 / WL 10 | 60°C | Ω | Ψ | α |
+
+---
+
+## Sector 8: ADVANCED UAV CALIBRATION PROTOCOL
+
+To calibrate a drifting UAV, follow these 4 steps precisely.
+
+**STEP 1: Identify Factory Baseline**
+Find the drone's model number on the telemetry feed to get the baseline values.
+* **Model RX-7:** Base Pitch = +10 | Base Roll = -5
+* **Model TX-9:** Base Pitch = -5 | Base Roll = +15
+* **Model QF-4:** Base Pitch = 0 | Base Roll = -10
+
+**STEP 2: Determine Offset Value & Polarity**
+Cross-reference the Diagnostic LEDs with the Radar Ring number (1 is center-most, 5 is outer-most) where the drone is currently drifting.
+
+| Diagnostic LEDs | Rings 1-2 | Rings 3-4 | Ring 5 | Polarity State |
+| :--- | :--- | :--- | :--- | :--- |
+| **YEL-RED-YEL** | Offset = 4 | Offset = 8 | Offset = 12|  |
+| **RED-YEL-RED** | Offset = 5 | Offset = 10 | Offset = 15| **NORMAL** |
+| **GRN-BLU-GRN** | Offset = 6 | Offset = 9 | Offset = 14| **INVERTED** |
+
+**STEP 3: Apply Quadrant Rules**
+Determine which quadrant of the radar the drone is in. Apply the Offset Value from Step 2 to the Baselines from Step 1.
+* **Top-Right (Q1):** Subtract Offset from Pitch. Subtract Offset from Roll.
+* **Top-Left (Q2):** Subtract Offset from Pitch. Add Offset to Roll.
+* **Bottom-Left (Q3):** Add Offset to Pitch. Add Offset to Roll.
+* **Bottom-Right (Q4):** Add Offset to Pitch. Subtract Offset from Roll.
+
+**STEP 4: The Polarity Override**
+* If the Polarity State (from Step 2) is **NORMAL**: Input the Pitch and Roll values as calculated.
+* If the Polarity State is **INVERTED**: Toggle the Polarity Switch to ON. **You must SWAP the final Pitch and Roll values** (Input calculated Pitch into the Roll field, and vice versa).
+
+---
+
+
+## Sector 9: The Alchemist's Crucible
+Proprietary material synthesis via a 3x3 grid.
+
+**The Operator must tell you:** What raw materials they have and what the environment contains (Magma/Cryo-fluid).
+
+**Your Job:** Guide them through the logic chain to create **Obsidian** and break it.
+
+**THE SYNTHESIZER BLUEPRINT:**
+
+**1. Tool Recipes (3x3 Grid):**
+- **Silicate Tool (Stone Pick):** 3 Silicate and 2 Carbon Rods in a **V-shape** (Slots 0, 2, 4, 7, 8 approx). *Forged at Room Temp (20°C).*
+- **Ferrous Tool (Iron Pick):** 3 Purified Ferrous and 2 Carbon Rods in an **Upside-down T** (Slots 1, 4, 6, 7, 8). *Forged at Room Temp (20°C).*
+- **Crystalline Tool (Diamond Pick):** 3 Usable Crystalline and 2 Carbon Rods in an **L-shape** (Slots 0, 3, 6, 7, 8). *Forged at Room Temp (20°C).*
+
+**2. Refinement:**
+- **Purified Ferrous:** Place Raw Ferrous in Slot 4. Heat to **1200°C**.
+- **Usable Crystalline:** The Operator must "use" the **Ferrous Tool** on raw Crystalline in their inventory.
+- **Thermal Receptacle (Bucket):** 3 Purified Ferrous in a **Diagonal Line** (Slots 0, 4, 8).
+
+**3. Thermodynamics (The Trap):**
+- **To create Dense Obsidian:** Magma must be added to Cryo-Fluid. (Fill Receptacle with Magma first, then pour into Cryo-Fluid).
+- *Warning: Adding Cryo-Fluid to Magma results in Pumice (Useless).*
+
+---
+
+## Sector 10: Snoring Sabotage
+A mechanical weight balance puzzle to sabotage a sleeping target.
+
+**The Operator must tell you:**
+1. The Mechanical Advantage (MA) - how many ropes support the target m2.
+2. The name/mass of the object (m2) and if pulleys are RUSTY.
+3. The type of rope (Standard or Frayed).
+
+**Your Job:** Calculate the exact weight (m1) for the bucket.
+
+**THE RIGGER'S ALMANAC:**
+
+**1. Calculation Rule:** `Target Weight (m1) = (m2 mass / Mechanical Advantage) + Friction Offset`.
+- **Friction Offset:** Add **1.25kg** for every RUSTY pulley.
+
+**2. Tension Chart:**
+- **Standard Anvil (100kg), MA 2:** No friction. Needs **50kg**.
+- **Heavy Water (55kg), MA 4:** 1 Rusty Pulley. Needs **15kg** (13.75 + 1.25).
+- **Concrete Boulder (300kg), MA 2:** Frayed Red Cord.
+    - *WARNING:* Frayed cord snaps if tension (weight in bucket) exceeds 100kg.
+    - *SOLUTION:* Do NOT add weight. Tell the Operator to pull the **Emergency Lock (Red Lever)** to lock the system instead.
