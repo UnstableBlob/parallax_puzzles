@@ -102,6 +102,33 @@
     border: 1px solid rgba(255,255,255,0.1);
 }
 
+.subtitle {
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.scanData {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid #1e293b;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.scanDataTitle {
+    color: #0ff;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #1e293b;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+}
+
 .controlsPanel h3 {
     margin: 0;
     color: #cbd5e1;

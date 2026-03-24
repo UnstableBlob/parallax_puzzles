@@ -245,24 +245,33 @@ Proprietary material synthesis via a 3x3 grid.
 
 ---
 
-## Sector 10: Snoring Sabotage
-A mechanical weight balance puzzle to sabotage a sleeping target.
+## Sector 10: THE SNORING SABOTAGE
 
-**The Operator must tell you:**
-1. The Mechanical Advantage (MA) - how many ropes support the target m2.
-2. The name/mass of the object (m2) and if pulleys are RUSTY.
-3. The type of rope (Standard or Frayed).
+The sleeping target is directly beneath a suspended load ($m_2$). You must calculate the exact counter-weight ($m_1$) to balance the load without snapping the rope. 
 
-**Your Job:** Calculate the exact weight (m1) for the bucket.
+**STEP 1: Calculate Load Mass ($m_2$)**
+Identify the Container and its Contents. Multiply Volume by Density.
+* **Containers (Volume):**
+    * **CRATE:** 10 Vol
+    * **SAFE:** 5 Vol
+    * **BARREL:** 20 Vol
+* **Contents (Density):**
+    * **Scrap Iron:** 8 kg / Vol
+    * **Lead:** 12 kg / Vol
+    * **Gold Bars:** 20 kg / Vol
 
-**THE RIGGER'S ALMANAC:**
+**STEP 2: Calculate Base Tension**
+Divide the Load Mass ($m_2$) by the Mechanical Advantage (MA). The MA is the number of vertical ropes directly supporting the load.
+* `Base Tension = Load Mass / MA`
 
-**1. Calculation Rule:** `Target Weight (m1) = (m2 mass / Mechanical Advantage) + Friction Offset`.
-- **Friction Offset:** Add **1.25kg** for every RUSTY pulley.
+**STEP 3: Add Friction Modifier**
+Rusty pulleys require more tension to overcome friction. Add **5kg** to your Base Tension for **EVERY** rusty pulley in the rig.
+* `Target Weight (m1) = Base Tension + (Rusty Pulleys x 5kg)`
 
-**2. Tension Chart:**
-- **Standard Anvil (100kg), MA 2:** No friction. Needs **50kg**.
-- **Heavy Water (55kg), MA 4:** 1 Rusty Pulley. Needs **15kg** (13.75 + 1.25).
-- **Concrete Boulder (300kg), MA 2:** Frayed Red Cord.
-    - *WARNING:* Frayed cord snaps if tension (weight in bucket) exceeds 100kg.
-    - *SOLUTION:* Do NOT add weight. Tell the Operator to pull the **Emergency Lock (Red Lever)** to lock the system instead.
+**STEP 4: Verify Rope Tensile Strength (CRITICAL)**
+Check the color and condition of the rope. If your `Target Weight (m1)` is GREATER than the Max Load of the rope, the rope will snap and wake the target!
+* **Blue Thick Rope:** Max Load = 200 kg
+* **Green Braided Rope:** Max Load = 150 kg
+* **Red Frayed Rope:** Max Load = 40 kg
+
+*If `Target Weight` > `Max Load`, DO NOT ADD WEIGHT. Instruct the Operator to pull the **EMERGENCY LOCK LEVER**.*

@@ -117,69 +117,32 @@ We keep your exact logic chain (Stone -> Iron -> Bucket -> Diamond -> Obsidian),
     The Finish: Operator drags the Diamond Pickaxe to the Obsidian to clear the level.
 
 10.
-"The Snoring Sabotage" puzzle, escalating from simple to complex, and how to execute it.
-The Core Gameplay Loop
+"The Snoring Sabotage" (The Rigger's Equation)
 
-    The Vibe: A cartoonish, Rube Goldberg-esque basement. The father is snoring loudly on a couch directly below m2​.
+The objective is to eliminate the "direct lookup" vulnerability. Instead of the Guide simply looking up "Heavy Water = 55kg", the Operator must provide multiple variables (Container Type, Material, Rope Details, Pulley Condition) that the Guide plugs into a multi-step formula.
 
-    The Operator's Screen: * Sees the pulley configuration (how many times the rope wraps around).
+Now, every set requires calculation, and every set requires checking the "Trap" condition (the rope breaking). The trap is no longer a one-off gimmick for Set 3; it is a persistent threat they must calculate for every time.
 
-        Sees the object acting as m2​ (e.g., "Grandpa's Cast Iron Safe").
+### **The Enhanced Puzzle Logic: "The Rigger's Equation"**
 
-        Sees the color/thickness of the rope.
+**The Operator must communicate 5 variables:**
+1. **Container Type:** Defines the Volume multiplier.
+2. **Contents Label:** Defines the Material Density.
+3. **Mechanical Advantage (MA):** The number of vertical ropes supporting the load.
+4. **Pulley Condition:** The number of rusty, squeaking pulleys in the rig.
+5. **Rope Specs:** The color and condition of the rope holding the bucket.
 
-        Has a pile of various weights (1kg, 5kg, 10kg) to drag and drop into the m1​ bucket.
+**The Gameplay Loop:**
+1. **Operator:** "I have a Crate filled with Lead. There are 3 ropes supporting it (MA 3). I see 1 rusty pulley. The rope is a Green Braided cord."
+2. **Guide:** (Calculates) "A crate is volume 10. Lead is 12kg per volume. Total mass is 120kg. Divide by MA 3 gives 40kg base tension. One rusty pulley adds 5kg friction. You need 45kg total."
+3. **Guide:** (Checks Safety) "Wait, let me check the rope. Green Braided holds up to 150kg. You only need 45kg. You are safe. Add exactly 45kg to the bucket."
+4. **Operator:** *Adds weights. System balances.*
 
-    The Guide's Manual: "The Rigger's Almanac." Contains charts for calculating Mechanical Advantage, object weights, and rope tensile strengths.
+*(If it was a Frayed Red cord, which snaps at 40kg, the 45kg requirement would break it, forcing them to pull the Emergency Lever instead).*
 
-Level 1: The Basic Block and Tackle
+---
 
-    Operator: "Okay, m2​ is a 'Standard ACME Anvil'. The rope goes from the ceiling, down around the anvil's pulley, and back up to a fixed pulley, then down to my bucket."
-
-    Guide: Looks at Mechanical Advantage chart. "Okay, the anvil is supported by 2 rope segments. Your Mechanical Advantage is 2. Let me check the weight chart... An ACME Anvil is 100kg. That means your bucket (m1​) needs to weigh exactly 50kg to balance it."
-
-    Operator: "My bucket currently says 10kg on the side."
-
-    Guide: "Add exactly 40kg. No more, no less."
-
-    Execution: Operator drops in two 20kg weights. The system balances.
-
-Level 2: The Complex Array (Escalating Difficulty)
-
-To make it harder, increase the Mechanical Advantage and obfuscate the weights.
-
-    Operator: "This one is a mess. The rope wraps back and forth between a block on the ceiling and a block on m2​. I count 4 vertical ropes supporting m2​."
-
-    Guide: "MA is 4. What is m2​?"
-
-    Operator: "It's a glass tank filled with 'Heavy Water', size is 50 liters."
-
-    Guide: Looks at density table. "Heavy water is 1.1kg per liter. 50 liters means m2​ is 55kg. Divide by 4... you need 13.75kg of tension."
-
-    Operator: "I only have whole numbers! 1kg, 2kg, 5kg weights."
-
-    Guide: Checks manual. "Wait, look at the pulleys. Are any of them rusted?"
-
-    Operator: "Yeah, the bottom one is squeaking and rusty."
-
-    Guide: "Rusty pulleys add friction. The manual says add 1.25kg to your total for every rusty pulley. You need exactly 15kg in the bucket."
-
-Level 3: The Breaking Point (The Trap)
-
-This is where you introduce the string breaking mechanic you mentioned.
-
-    Operator: "I've got a massive concrete boulder hanging over him. MA is only 2. The rope is a thin, frayed red cord."
-
-    Guide: "A concrete boulder is 300kg. With an MA of 2, you need to put 150kg in your bucket to balance it."
-
-    Operator: "Okay, dragging 150kg in..."
-
-    Guide: "WAIT! Check the Rope Tensile Strength chart! A frayed red cord snaps if the tension exceeds 100kg!"
-
-    Operator: "So if I balance it, it snaps and drops the boulder. What do I do?"
-
-    Guide: "Look around the room. Is there a 'Safety Pin' or 'Locking Gear' on the top pulley?"
-
-    Operator: "Yes! A big red lever."
-
-    Guide: "Pull the lever to lock the pulley! Don't add weight!"
+### **The Puzzle Configuration (Equally difficult sets):**
+* **Set 1:** Crate(10) * Lead(12) = 120kg. MA=3 -> 40kg. Rusty=1(+5) -> Target: 45kg. Green Braided max is 150. (45 < 150) -> **Safe.**
+* **Set 2:** Safe(5) * Gold(20) = 100kg. MA=2 -> 50kg. Rusty=2(+10) -> Target: 60kg. Red Frayed max is 40. (60 > 40) -> **TRAP! Pull Lever.**
+* **Set 3:** Barrel(20) * Scrap(8) = 160kg. MA=4 -> 40kg. Rusty=3(+15) -> Target: 55kg. Blue Thick max is 200. (55 < 200) -> **Safe.**
